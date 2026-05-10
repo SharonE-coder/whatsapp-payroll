@@ -1,5 +1,12 @@
 from datetime import date
 
+from datetime import datetime
+
+from app.models.payroll_run import PayrollRun
+
+from app.repositories.payroll_run_repository import (
+    PayrollRunRepository,
+)
 from app.repositories.employee_repository import EmployeeRepository
 from app.repositories.compensation_repository import (
     CompensationRepository,
@@ -24,12 +31,18 @@ class PayrollService:
         employee_repository: EmployeeRepository,
         compensation_repository: CompensationRepository,
         adjustment_repository: AdjustmentRepository,
+        payroll_run_repository: PayrollRunRepository,
     ):
         self.employee_repository = employee_repository
 
         self.compensation_repository = compensation_repository
 
         self.adjustment_repository = adjustment_repository
+
+        self.payroll_run_repository = (
+            payroll_run_repository
+        )
+        
 
     def calculate_monthly_salary(
         self,

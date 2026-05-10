@@ -1,0 +1,22 @@
+from datetime import datetime
+
+from app.models.payroll_run import PayrollRun
+
+
+def test_create_payroll_run():
+    """
+    Test payroll run model creation
+    """
+
+    payroll_run = PayrollRun(
+        id=1,
+        payroll_month=5,
+        payroll_year=2024,
+        total_payroll_amount=250000,
+        status="draft",
+        created_at=datetime.now(),
+    )
+
+    assert payroll_run.payroll_month == 5
+
+    assert payroll_run.status == "draft"

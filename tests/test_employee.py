@@ -1,5 +1,3 @@
-# tests/test_employee.py
-
 from datetime import date
 from app.models.employee import Employee
 

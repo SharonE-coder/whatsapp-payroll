@@ -13,6 +13,10 @@ from app.repositories.adjustment_repository import (
     AdjustmentRepository,
 )
 
+from app.repositories.payroll_run_repository import (
+    PayrollRunRepository,
+)
+
 from app.services.payroll_service import PayrollService
 
 def test_apply_adjustments():
@@ -26,10 +30,13 @@ def test_apply_adjustments():
 
     adjustment_repository = AdjustmentRepository()
 
+    payroll_run_repository = PayrollRunRepository()
+
     payroll_service = PayrollService(
         employee_repository=employee_repository,
         compensation_repository=compensation_repository,
         adjustment_repository=adjustment_repository,
+        payroll_run_repository=payroll_run_repository,
     )
 
     # Create bonus adjustment
@@ -79,10 +86,13 @@ def test_run_payroll():
 
     adjustment_repository = AdjustmentRepository()
 
+    payroll_run_repository = PayrollRunRepository()
+
     payroll_service = PayrollService(
         employee_repository=employee_repository,
         compensation_repository=compensation_repository,
         adjustment_repository=adjustment_repository,
+        payroll_run_repository=payroll_run_repository,
     )
 
     # Employee 1
