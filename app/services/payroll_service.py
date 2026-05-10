@@ -4,6 +4,9 @@ from app.repositories.employee_repository import EmployeeRepository
 from app.repositories.compensation_repository import (
     CompensationRepository,
 )
+from app.repositories.adjustment_repository import (
+    AdjustmentRepository,
+)
 
 
 class PayrollService:
@@ -20,10 +23,13 @@ class PayrollService:
         self,
         employee_repository: EmployeeRepository,
         compensation_repository: CompensationRepository,
+        adjustment_repository: AdjustmentRepository,
     ):
         self.employee_repository = employee_repository
 
         self.compensation_repository = compensation_repository
+
+        self.adjustment_repository = adjustment_repository
 
     def calculate_monthly_salary(
         self,
@@ -59,3 +65,40 @@ class PayrollService:
             raise ValueError("No active compensation found")
 
         return compensation.base_salary
+
+    def apply_adjustments(
+        self,
+        employee_id: int,
+        payroll_date: date,
+        base_salary: float,
+    ) -> float:
+        """
+        Apply bonuses and deductions to salary
+        """
+
+        # Start with original salary
+        final_salary = base_salary
+
+        # Get all adjustments for employee on payroll date
+        adjustments = (
+            self.adjustment_repository.get_employee_adjustments(
+                employee_id=employee_id,
+                effective_date=payroll_date,
+            )
+        )
+
+        # Loop through adjustments one by one
+        for adjustment in adjustments:
+
+            # Add bonus
+            if adjustment.adjustment_type == "bonus":
+
+                final_salary += adjustment.amount
+
+            # Subtract deduction
+            elif adjustment.adjustment_type == "deduction":
+
+                final_salary -= adjustment.amount
+
+        # Return final calculated salary
+        return round(final_salary, 2)
