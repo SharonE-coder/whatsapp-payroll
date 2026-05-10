@@ -102,3 +102,62 @@ class PayrollService:
 
         # Return final calculated salary
         return round(final_salary, 2)
+    
+    def run_payroll(
+        self,
+        payroll_date: date,
+    ) -> dict:
+        """
+        Run payroll for all active employees
+        """
+
+        payroll_results = []
+
+        total_payroll_amount = 0
+
+        employees = (
+            self.employee_repository.get_all_employees()
+        )
+
+        for employee in employees:
+
+            # Skip inactive employees
+            if not employee.is_active:
+                continue
+
+            # Get base salary
+            base_salary = (
+                self.calculate_monthly_salary(
+                    employee_id=employee.id,
+                    payroll_date=payroll_date,
+                )
+            )
+
+            # Apply bonuses/deductions
+            final_salary = (
+                self.apply_adjustments(
+                    employee_id=employee.id,
+                    payroll_date=payroll_date,
+                    base_salary=base_salary,
+                )
+            )
+
+            payroll_results.append(
+                {
+                    "employee_id": employee.id,
+                    "employee_name": employee.full_name,
+                    "base_salary": base_salary,
+                    "final_salary": final_salary,
+                }
+            )
+
+            total_payroll_amount += final_salary
+
+        return {
+            "payroll_date": payroll_date,
+            "employees": payroll_results,
+            "total_payroll_amount": round(
+                total_payroll_amount,
+                2,
+            ),
+        }

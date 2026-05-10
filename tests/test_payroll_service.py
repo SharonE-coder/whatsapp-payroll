@@ -67,3 +67,73 @@ def test_apply_adjustments():
     # Expected:
     # 150k + 20k - 5k = 165k
     assert final_salary == 165000
+
+def test_run_payroll():
+    """
+    Test full payroll run
+    """
+
+    employee_repository = EmployeeRepository()
+
+    compensation_repository = CompensationRepository()
+
+    adjustment_repository = AdjustmentRepository()
+
+    payroll_service = PayrollService(
+        employee_repository=employee_repository,
+        compensation_repository=compensation_repository,
+        adjustment_repository=adjustment_repository,
+    )
+
+    # Employee 1
+    employee_1 = Employee(
+        id=1,
+        full_name="John Doe",
+        phone_number="08012345678",
+        bank_name="GTBank",
+        account_number="1234567890",
+    )
+
+    compensation_1 = Compensation(
+        id=1,
+        employee_id=1,
+        base_salary=150000,
+        effective_from=date(2024, 1, 1),
+    )
+
+    # Employee 2
+    employee_2 = Employee(
+        id=2,
+        full_name="Jane Smith",
+        phone_number="08087654321",
+        bank_name="Access Bank",
+        account_number="0987654321",
+    )
+
+    compensation_2 = Compensation(
+        id=2,
+        employee_id=2,
+        base_salary=100000,
+        effective_from=date(2024, 1, 1),
+    )
+
+    employee_repository.add_employee(employee_1)
+    employee_repository.add_employee(employee_2)
+
+    compensation_repository.add_compensation(
+        compensation_1
+    )
+
+    compensation_repository.add_compensation(
+        compensation_2
+    )
+
+    payroll_result = payroll_service.run_payroll(
+        payroll_date=date(2024, 5, 1),
+    )
+
+    assert len(payroll_result["employees"]) == 2
+
+    assert payroll_result[
+        "total_payroll_amount"
+    ] == 250000
