@@ -1,4 +1,9 @@
+import pytest
+
 from datetime import date
+from datetime import datetime
+
+from app.models.payroll_run import PayrollRun
 
 from app.models.employee import Employee
 from app.models.compensation import Compensation
@@ -147,3 +152,44 @@ def test_run_payroll():
     assert payroll_result[
         "total_payroll_amount"
     ] == 250000
+
+
+def test_prevent_duplicate_payroll_run():
+    """
+    Test preventing duplicate payroll runs
+    """
+
+    employee_repository = EmployeeRepository()
+
+    compensation_repository = CompensationRepository()
+
+    adjustment_repository = AdjustmentRepository()
+
+    payroll_run_repository = PayrollRunRepository()
+
+    payroll_service = PayrollService(
+        employee_repository=employee_repository,
+        compensation_repository=compensation_repository,
+        adjustment_repository=adjustment_repository,
+        payroll_run_repository=payroll_run_repository,
+    )
+
+    # Existing payroll already stored
+    existing_payroll = PayrollRun(
+        id=1,
+        payroll_month=5,
+        payroll_year=2024,
+        total_payroll_amount=250000,
+        status="paid",
+        created_at=datetime.now(),
+    )
+
+    payroll_run_repository.add_payroll_run(
+        existing_payroll
+    )
+
+    with pytest.raises(ValueError):
+
+        payroll_service.run_payroll(
+            payroll_date=date(2024, 5, 1),
+        )

@@ -123,7 +123,17 @@ class PayrollService:
         """
         Run payroll for all active employees
         """
+        existing_payroll_run = (
+            self.payroll_run_repository.get_payroll_run(
+                payroll_month=payroll_date.month,
+                payroll_year=payroll_date.year,
+            )
+        )
 
+        if existing_payroll_run is not None:
+            raise ValueError(
+                "Payroll already exists for this month"
+            )
         payroll_results = []
 
         total_payroll_amount = 0
