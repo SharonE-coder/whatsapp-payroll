@@ -193,3 +193,61 @@ def test_prevent_duplicate_payroll_run():
         payroll_service.run_payroll(
             payroll_date=date(2024, 5, 1),
         )
+
+def test_payroll_run_is_saved():
+    """
+    Test payroll run gets saved
+    """
+
+    employee_repository = EmployeeRepository()
+
+    compensation_repository = CompensationRepository()
+
+    adjustment_repository = AdjustmentRepository()
+
+    payroll_run_repository = PayrollRunRepository()
+
+    payroll_service = PayrollService(
+        employee_repository=employee_repository,
+        compensation_repository=compensation_repository,
+        adjustment_repository=adjustment_repository,
+        payroll_run_repository=payroll_run_repository,
+    )
+
+    employee = Employee(
+        id=1,
+        full_name="John Doe",
+        phone_number="08012345678",
+        bank_name="GTBank",
+        account_number="1234567890",
+    )
+
+    compensation = Compensation(
+        id=1,
+        employee_id=1,
+        base_salary=150000,
+        effective_from=date(2024, 1, 1),
+    )
+
+    employee_repository.add_employee(employee)
+
+    compensation_repository.add_compensation(
+        compensation
+    )
+
+    payroll_service.run_payroll(
+        payroll_date=date(2024, 5, 1),
+    )
+
+    saved_payroll = (
+        payroll_run_repository.get_payroll_run(
+            payroll_month=5,
+            payroll_year=2024,
+        )
+    )
+
+    assert saved_payroll is not None
+
+    assert saved_payroll.total_payroll_amount == 150000
+
+    assert saved_payroll.status == "draft"

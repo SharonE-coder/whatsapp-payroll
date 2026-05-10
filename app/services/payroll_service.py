@@ -176,6 +176,29 @@ class PayrollService:
 
             total_payroll_amount += final_salary
 
+        payroll_run = PayrollRun(
+            id=len(
+                self.payroll_run_repository.payroll_runs
+            ) + 1,
+
+            payroll_month=payroll_date.month,
+
+            payroll_year=payroll_date.year,
+
+            total_payroll_amount=round(
+                total_payroll_amount,
+                2,
+            ),
+
+            status="draft",
+
+            created_at=datetime.now(),
+        )
+
+        self.payroll_run_repository.add_payroll_run(
+            payroll_run
+        )
+
         return {
             "payroll_date": payroll_date,
             "employees": payroll_results,
