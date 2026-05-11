@@ -4,12 +4,14 @@ from datetime import date
 from datetime import datetime
 
 from app.models.payroll_run import PayrollRun
-
 from app.models.employee import Employee
 from app.models.compensation import Compensation
 from app.models.adjustment import Adjustment
 
-from app.repositories.employee_repository import EmployeeRepository
+from app.repositories.employee_repository import (
+    EmployeeRepository,
+)
+
 from app.repositories.compensation_repository import (
     CompensationRepository,
 )
@@ -22,7 +24,14 @@ from app.repositories.payroll_run_repository import (
     PayrollRunRepository,
 )
 
-from app.services.payroll_service import PayrollService
+from app.repositories.payroll_run_item_repository import (
+    PayrollRunItemRepository,
+)
+
+from app.services.payroll_service import (
+    PayrollService,
+)
+
 
 def test_apply_adjustments():
     """
@@ -31,17 +40,36 @@ def test_apply_adjustments():
 
     employee_repository = EmployeeRepository()
 
-    compensation_repository = CompensationRepository()
+    compensation_repository = (
+        CompensationRepository()
+    )
 
-    adjustment_repository = AdjustmentRepository()
+    adjustment_repository = (
+        AdjustmentRepository()
+    )
 
-    payroll_run_repository = PayrollRunRepository()
+    payroll_run_repository = (
+        PayrollRunRepository()
+    )
+
+    payroll_run_item_repository = (
+        PayrollRunItemRepository()
+    )
 
     payroll_service = PayrollService(
         employee_repository=employee_repository,
-        compensation_repository=compensation_repository,
-        adjustment_repository=adjustment_repository,
-        payroll_run_repository=payroll_run_repository,
+        compensation_repository=(
+            compensation_repository
+        ),
+        adjustment_repository=(
+            adjustment_repository
+        ),
+        payroll_run_repository=(
+            payroll_run_repository
+        ),
+        payroll_run_item_repository=(
+            payroll_run_item_repository
+        ),
     )
 
     # Create bonus adjustment
@@ -64,21 +92,25 @@ def test_apply_adjustments():
         effective_date=date(2024, 5, 1),
     )
 
-    # Store adjustments
-    adjustment_repository.add_adjustment(bonus)
-
-    adjustment_repository.add_adjustment(deduction)
-
-    # Apply adjustments to base salary
-    final_salary = payroll_service.apply_adjustments(
-        employee_id=1,
-        payroll_date=date(2024, 5, 1),
-        base_salary=150000,
+    adjustment_repository.add_adjustment(
+        bonus
     )
 
-    # Expected:
-    # 150k + 20k - 5k = 165k
+    adjustment_repository.add_adjustment(
+        deduction
+    )
+
+    final_salary = (
+        payroll_service.apply_adjustments(
+            employee_id=1,
+            payroll_date=date(2024, 5, 1),
+            base_salary=150000,
+        )
+    )
+
+    # 150k + 20k - 5k
     assert final_salary == 165000
+
 
 def test_run_payroll():
     """
@@ -87,17 +119,36 @@ def test_run_payroll():
 
     employee_repository = EmployeeRepository()
 
-    compensation_repository = CompensationRepository()
+    compensation_repository = (
+        CompensationRepository()
+    )
 
-    adjustment_repository = AdjustmentRepository()
+    adjustment_repository = (
+        AdjustmentRepository()
+    )
 
-    payroll_run_repository = PayrollRunRepository()
+    payroll_run_repository = (
+        PayrollRunRepository()
+    )
+
+    payroll_run_item_repository = (
+        PayrollRunItemRepository()
+    )
 
     payroll_service = PayrollService(
         employee_repository=employee_repository,
-        compensation_repository=compensation_repository,
-        adjustment_repository=adjustment_repository,
-        payroll_run_repository=payroll_run_repository,
+        compensation_repository=(
+            compensation_repository
+        ),
+        adjustment_repository=(
+            adjustment_repository
+        ),
+        payroll_run_repository=(
+            payroll_run_repository
+        ),
+        payroll_run_item_repository=(
+            payroll_run_item_repository
+        ),
     )
 
     # Employee 1
@@ -132,8 +183,13 @@ def test_run_payroll():
         effective_from=date(2024, 1, 1),
     )
 
-    employee_repository.add_employee(employee_1)
-    employee_repository.add_employee(employee_2)
+    employee_repository.add_employee(
+        employee_1
+    )
+
+    employee_repository.add_employee(
+        employee_2
+    )
 
     compensation_repository.add_compensation(
         compensation_1
@@ -143,15 +199,23 @@ def test_run_payroll():
         compensation_2
     )
 
-    payroll_result = payroll_service.run_payroll(
-        payroll_date=date(2024, 5, 1),
+    payroll_result = (
+        payroll_service.run_payroll(
+            payroll_date=date(2024, 5, 1),
+        )
     )
 
-    assert len(payroll_result["employees"]) == 2
+    assert (
+        len(payroll_result["employees"])
+        == 2
+    )
 
-    assert payroll_result[
-        "total_payroll_amount"
-    ] == 250000
+    assert (
+        payroll_result[
+            "total_payroll_amount"
+        ]
+        == 250000
+    )
 
 
 def test_prevent_duplicate_payroll_run():
@@ -161,20 +225,38 @@ def test_prevent_duplicate_payroll_run():
 
     employee_repository = EmployeeRepository()
 
-    compensation_repository = CompensationRepository()
+    compensation_repository = (
+        CompensationRepository()
+    )
 
-    adjustment_repository = AdjustmentRepository()
+    adjustment_repository = (
+        AdjustmentRepository()
+    )
 
-    payroll_run_repository = PayrollRunRepository()
+    payroll_run_repository = (
+        PayrollRunRepository()
+    )
+
+    payroll_run_item_repository = (
+        PayrollRunItemRepository()
+    )
 
     payroll_service = PayrollService(
         employee_repository=employee_repository,
-        compensation_repository=compensation_repository,
-        adjustment_repository=adjustment_repository,
-        payroll_run_repository=payroll_run_repository,
+        compensation_repository=(
+            compensation_repository
+        ),
+        adjustment_repository=(
+            adjustment_repository
+        ),
+        payroll_run_repository=(
+            payroll_run_repository
+        ),
+        payroll_run_item_repository=(
+            payroll_run_item_repository
+        ),
     )
 
-    # Existing payroll already stored
     existing_payroll = PayrollRun(
         id=1,
         payroll_month=5,
@@ -194,6 +276,7 @@ def test_prevent_duplicate_payroll_run():
             payroll_date=date(2024, 5, 1),
         )
 
+
 def test_payroll_run_is_saved():
     """
     Test payroll run gets saved
@@ -201,17 +284,36 @@ def test_payroll_run_is_saved():
 
     employee_repository = EmployeeRepository()
 
-    compensation_repository = CompensationRepository()
+    compensation_repository = (
+        CompensationRepository()
+    )
 
-    adjustment_repository = AdjustmentRepository()
+    adjustment_repository = (
+        AdjustmentRepository()
+    )
 
-    payroll_run_repository = PayrollRunRepository()
+    payroll_run_repository = (
+        PayrollRunRepository()
+    )
+
+    payroll_run_item_repository = (
+        PayrollRunItemRepository()
+    )
 
     payroll_service = PayrollService(
         employee_repository=employee_repository,
-        compensation_repository=compensation_repository,
-        adjustment_repository=adjustment_repository,
-        payroll_run_repository=payroll_run_repository,
+        compensation_repository=(
+            compensation_repository
+        ),
+        adjustment_repository=(
+            adjustment_repository
+        ),
+        payroll_run_repository=(
+            payroll_run_repository
+        ),
+        payroll_run_item_repository=(
+            payroll_run_item_repository
+        ),
     )
 
     employee = Employee(
@@ -229,7 +331,9 @@ def test_payroll_run_is_saved():
         effective_from=date(2024, 1, 1),
     )
 
-    employee_repository.add_employee(employee)
+    employee_repository.add_employee(
+        employee
+    )
 
     compensation_repository.add_compensation(
         compensation
@@ -240,7 +344,8 @@ def test_payroll_run_is_saved():
     )
 
     saved_payroll = (
-        payroll_run_repository.get_payroll_run(
+        payroll_run_repository
+        .get_payroll_run(
             payroll_month=5,
             payroll_year=2024,
         )
@@ -248,6 +353,98 @@ def test_payroll_run_is_saved():
 
     assert saved_payroll is not None
 
-    assert saved_payroll.total_payroll_amount == 150000
+    assert (
+        saved_payroll.total_payroll_amount
+        == 150000
+    )
 
-    assert saved_payroll.status == "draft"
+    assert (
+        saved_payroll.status
+        == "draft"
+    )
+
+
+def test_payroll_run_items_are_saved():
+    """
+    Test payroll employee snapshots are saved
+    """
+
+    employee_repository = EmployeeRepository()
+
+    compensation_repository = (
+        CompensationRepository()
+    )
+
+    adjustment_repository = (
+        AdjustmentRepository()
+    )
+
+    payroll_run_repository = (
+        PayrollRunRepository()
+    )
+
+    payroll_run_item_repository = (
+        PayrollRunItemRepository()
+    )
+
+    payroll_service = PayrollService(
+        employee_repository=employee_repository,
+        compensation_repository=(
+            compensation_repository
+        ),
+        adjustment_repository=(
+            adjustment_repository
+        ),
+        payroll_run_repository=(
+            payroll_run_repository
+        ),
+        payroll_run_item_repository=(
+            payroll_run_item_repository
+        ),
+    )
+
+    employee = Employee(
+        id=1,
+        full_name="John Doe",
+        phone_number="08012345678",
+        bank_name="GTBank",
+        account_number="1234567890",
+    )
+
+    compensation = Compensation(
+        id=1,
+        employee_id=1,
+        base_salary=150000,
+        effective_from=date(2024, 1, 1),
+    )
+
+    employee_repository.add_employee(
+        employee
+    )
+
+    compensation_repository.add_compensation(
+        compensation
+    )
+
+    payroll_service.run_payroll(
+        payroll_date=date(2024, 5, 1),
+    )
+
+    payroll_items = (
+        payroll_run_item_repository
+        .get_payroll_run_items(
+            payroll_run_id=1
+        )
+    )
+
+    assert len(payroll_items) == 1
+
+    assert (
+        payroll_items[0].employee_name
+        == "John Doe"
+    )
+
+    assert (
+        payroll_items[0].final_salary
+        == 150000
+    )
