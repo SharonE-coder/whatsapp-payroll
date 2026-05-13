@@ -1,4 +1,4 @@
-from app.models.payroll_run import PayrollRun
+from app.payroll.models.payroll_run import PayrollRun
 
 
 class PayrollRunRepository:

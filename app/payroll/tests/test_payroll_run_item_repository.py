@@ -1,8 +1,8 @@
-from app.models.payroll_run_item import (
+from app.payroll.models.payroll_run_item import (
     PayrollRunItem,
 )
 
-from app.repositories.payroll_run_item_repository import (
+from app.payroll.repositories.payroll_run_item_repository import (
     PayrollRunItemRepository,
 )
 

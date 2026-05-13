@@ -1,4 +1,4 @@
-from app.models.payroll_run_item import (
+from app.payroll.models.payroll_run_item import (
     PayrollRunItem,
 )
 

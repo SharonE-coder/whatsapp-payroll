@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.models.payroll_run import PayrollRun
+from app.payroll.models.payroll_run import PayrollRun
 
 
 def test_create_payroll_run():

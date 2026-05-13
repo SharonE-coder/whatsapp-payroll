@@ -1,5 +1,5 @@
-from app.models.employee import Employee
-from app.repositories.employee_repository import EmployeeRepository
+from app.payroll.models.employee import Employee
+from app.payroll.repositories.employee_repository import EmployeeRepository
 
 
 def test_add_employee():

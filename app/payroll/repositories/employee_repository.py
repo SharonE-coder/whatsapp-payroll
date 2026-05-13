@@ -1,4 +1,4 @@
-from app.models.employee import Employee
+from app.payroll.models.employee import Employee
 
 
 class EmployeeRepository:

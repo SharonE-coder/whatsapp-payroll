@@ -3,32 +3,32 @@ import pytest
 from datetime import date
 from datetime import datetime
 
-from app.models.payroll_run import PayrollRun
-from app.models.employee import Employee
-from app.models.compensation import Compensation
-from app.models.adjustment import Adjustment
+from app.payroll.models.payroll_run import PayrollRun
+from app.payroll.models.employee import Employee
+from app.payroll.models.compensation import Compensation
+from app.payroll.models.adjustment import Adjustment
 
-from app.repositories.employee_repository import (
+from app.payroll.repositories.employee_repository import (
     EmployeeRepository,
 )
 
-from app.repositories.compensation_repository import (
+from app.payroll.repositories.compensation_repository import (
     CompensationRepository,
 )
 
-from app.repositories.adjustment_repository import (
+from app.payroll.repositories.adjustment_repository import (
     AdjustmentRepository,
 )
 
-from app.repositories.payroll_run_repository import (
+from app.payroll.repositories.payroll_run_repository import (
     PayrollRunRepository,
 )
 
-from app.repositories.payroll_run_item_repository import (
+from app.payroll.repositories.payroll_run_item_repository import (
     PayrollRunItemRepository,
 )
 
-from app.services.payroll_service import (
+from app.payroll.services.payroll_service import (
     PayrollService,
 )
 

@@ -1,6 +1,6 @@
 from datetime import date
 
-from app.models.compensation import Compensation
+from app.payroll.models.compensation import Compensation
 
 
 class CompensationRepository:

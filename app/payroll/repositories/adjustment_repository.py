@@ -1,6 +1,6 @@
 from datetime import date
 
-from app.models.adjustment import Adjustment
+from app.payroll.models.adjustment import Adjustment
 
 
 class AdjustmentRepository:

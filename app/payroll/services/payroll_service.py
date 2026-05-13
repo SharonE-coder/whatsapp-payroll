@@ -1,26 +1,26 @@
 from datetime import date
 from datetime import datetime
 
-from app.models.payroll_run import PayrollRun
-from app.models.payroll_run_item import PayrollRunItem
+from app.payroll.models.payroll_run import PayrollRun
+from app.payroll.models.payroll_run_item import PayrollRunItem
 
-from app.repositories.payroll_run_repository import (
+from app.payroll.repositories.payroll_run_repository import (
     PayrollRunRepository,
 )
 
-from app.repositories.payroll_run_item_repository import (
+from app.payroll.repositories.payroll_run_item_repository import (
     PayrollRunItemRepository,
 )
 
-from app.repositories.employee_repository import (
+from app.payroll.repositories.employee_repository import (
     EmployeeRepository,
 )
 
-from app.repositories.compensation_repository import (
+from app.payroll.repositories.compensation_repository import (
     CompensationRepository,
 )
 
-from app.repositories.adjustment_repository import (
+from app.payroll.repositories.adjustment_repository import (
     AdjustmentRepository,
 )
 

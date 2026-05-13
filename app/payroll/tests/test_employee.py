@@ -1,5 +1,5 @@
 from datetime import date
-from app.models.employee import Employee
+from app.payroll.models.employee import Employee
 
 
 def test_create_employee():

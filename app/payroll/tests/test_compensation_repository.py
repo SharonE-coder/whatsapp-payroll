@@ -1,7 +1,7 @@
 from datetime import date
 
-from app.models.compensation import Compensation
-from app.repositories.compensation_repository import (
+from app.payroll.models.compensation import Compensation
+from app.payroll.repositories.compensation_repository import (
     CompensationRepository,
 )
 
