@@ -1,7 +1,8 @@
-# app/models/payroll_run.py
-
 from dataclasses import dataclass
 from datetime import datetime
+from app.payroll.state_machine.payroll_states import (
+    PayrollState,
+)
 
 
 @dataclass
@@ -24,7 +25,7 @@ class PayrollRun:
     total_payroll_amount: float
     # Total amount paid to all employees
 
-    status: str
+    status: PayrollState
     # Example:
     # "draft"
     # "approved"

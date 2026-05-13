@@ -1,6 +1,10 @@
 from datetime import datetime
 
 from app.payroll.models.payroll_run import PayrollRun
+from app.payroll.state_machine.payroll_states import (
+    PayrollState,
+)
+
 
 
 def test_create_payroll_run():
@@ -19,4 +23,4 @@ def test_create_payroll_run():
 
     assert payroll_run.payroll_month == 5
 
-    assert payroll_run.status == "draft"
+    assert payroll_run.status == PayrollState.DRAFT
